@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMR Mobile - iPhones Importados dos EUA</title>
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/iphone--v1.png">
+    
+    <!-- Three.js para animações 3D avançadas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP para animações -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <!-- Swiper para slides -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-usa-blue: #3C3B6E;
+            --color-usa-red: #B22234;
+            --color-usa-white: #FFFFFF;
+            --color-dark-bg: #000000;
+            --color-dark-card: #1C1C1E;
+            --color-dark-text: #F2F2F7;
+            --color-dark-border: #2C2C2E;
+            --color-light-bg: #F2F2F7;
+            --color-light-card: #FFFFFF;
+            --color-light-text: #1C1C1E;
+            --color-light-border: #C7C7CC;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-dark-bg);
+            color: var(--color-dark-text);
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        
+        body.light-mode {
+            background-color: var(--color-light-bg);
+            color: var(--color-light-text);
+        }
+        
+        /* Cores da bandeira americana nos gradientes */
+        .usa-gradient-red-blue {
+            background: linear-gradient(135deg, var(--color-usa-red), var(--color-usa-blue));
+        }
+        
+        .usa-gradient-red-white-blue {
+            background: linear-gradient(135deg, var(--color-usa-red), var(--color-usa-white), var(--color-usa-blue));
+        }
+        
+        .text-usa-red {
+            color: var(--color-usa-red);
+        }
+        
+        .text-usa-blue {
+            color: var(--color-usa-blue);
+        }
+        
+        .border-usa-red {
+            border-color: var(--color-usa-red);
+        }
+        
+        .border-usa-blue {
+            border-color: var(--color-usa-blue);
+        }
+        
+        /* Efeito de vidro (glass morphism) */
+        .glass-effect {
+            background: rgba(28, 28, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .light-mode .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Cards com efeito 3D */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .card-3d:hover {
+            transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateY(-10px);
+        }
+        
+        /* iPhone 3D container */
+        .iphone-3d-container {
+            width: 300px;
+            height: 600px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(1500px) rotateY(-20deg) rotateX(10deg);
+            transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .iphone-3d-container:hover {
+            transform: perspective(1500px) rotateY(0deg) rotateX(0deg);
+        }
+        
+        /* Animações de entrada */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Efeito de partículas flutuantes */
+        .floating-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--color-usa-blue), transparent);
+            opacity: 0.3;
+            filter: blur(10px);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+        
+        /* Switch dark/light mode */
+        .mode-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--color-dark-card);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: 1px solid var(--color-dark-border);
+        }
+        
+        .light-mode .mode-switch {
+            background: var(--color-light-card);
+            border: 1px solid var(--color-light-border);
+        }
+        
+        .mode-switch::before {
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: var(--color-dark-text);
+            border-radius: 50%;
+            top: 1px;
+            left: 2px;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--color-dark-bg);
+        }
+        
+        .light-mode .mode-switch::before {
+            background: var(--color-light-text);
+            color: var(--color-light-bg);
+            transform: translateX(30px);
+        }
+        
+        /* Estilização do Swiper */
+        .swiper {
+            width: 100%;
+            height: 400px;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .swiper-slide-active img {
+            transform: scale(1.05);
+        }
+        
+        /* Animações para elementos 3D */
+        .rotate-3d {
+            transform-style: preserve-3d;
+            animation: rotate3d 20s infinite linear;
+        }
+        
+        @keyframes rotate3d {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        /* Estilos para scroll personalizado */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--color-dark-card);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-usa-red);
+            border-radius: 5px;
+        }
+        
+        .light-mode ::-webkit-scrollbar-track {
+            background: var(--color-light-border);
+        }
+        
+        .light-mode ::-webkit-scrollbar-thumb {
+            background: var(--color-usa-blue);
+        }
+        
+        /* Menu hamburguer responsivo */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background: rgba(28, 28, 30, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            padding: 80px 30px 30px;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.open {
+            right: 0;
+        }
+        
+        .light-mode .mobile-menu {
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            width: 30px;
+            height: 24px;
+            justify-content: space-between;
+        }
+        
+        .hamburger span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--color-dark-text);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .light-mode .hamburger span {
+            background-color: var(--color-light-text);
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+        
+        /* Botões flutuantes */
+        .floating-buttons {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 50;
+        }
+        
+        .floating-language-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(28, 28, 30, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-language-btn:hover {
+            transform: scale(1.1);
+            background: var(--color-usa-blue);
+        }
+        
+        .light-mode .floating-language-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--color-light-text);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .desktop-nav {
+                display: none !important;
+            }
+            
+            .iphone-3d-container {
+                width: 250px;
+                height: 500px;
+            }
+            
+            .floating-buttons {
+                bottom: 90px;
+                right: 20px;
+            }
+            
+            .floating-language-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            h1.text-5xl {
+                font-size: 2.5rem !important;
+            }
+            
+            h2.text-4xl {
+                font-size: 2rem !important;
+            }
+            
+            .swiper {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .floating-buttons {
+                bottom: 80px;
+                right: 15px;
+            }
+            
+            .iphone-3d-container {
+                width: 200px;
+                height: 400px;
+            }
+            
+            .mobile-menu {
+                width: 85%;
+            }
+            
+            .swiper {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Partículas flutuantes de fundo -->
+    <div id="floating-particles"></div>
+    
+    <!-- Cabeçalho -->
+    <header class="fixed top-0 left-0 w-full z-50 py-4 px-4 md:px-8">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center glass-effect rounded-2xl px-6 py-4">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl usa-gradient-red-blue flex items-center justify-center rotate-3d">
+                        <i class="fab fa-apple text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">AMR <span class="text-usa-red">Mobile</span></h1>
+                    </div>
+                </div>
+                
+                <!-- Navegação Desktop -->
+                <nav class="desktop-nav md:flex space-x-8 hidden">
+                    <a href="#home" class="font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.home">Início</a>
+                    <a href="#catalog" class="font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.catalog">Catálogo</a>
+                    <a href="#about" class="font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.about">Sobre Nós</a>
+                    <a href="#faq" class="font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.faq">FAQ</a>
+                    <a href="#contact" class="font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.contact">Contato</a>
+                </nav>
+                
+                <!-- Menu Hamburguer -->
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Menu Mobile -->
+    <div class="mobile-menu" id="mobileMenu">
+        <nav class="flex flex-col space-y-6">
+            <a href="#home" class="text-xl font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.home">Início</a>
+            <a href="#catalog" class="text-xl font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.catalog">Catálogo</a>
+            <a href="#about" class="text-xl font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.about">Sobre Nós</a>
+            <a href="#faq" class="text-xl font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.faq">FAQ</a>
+            <a href="#contact" class="text-xl font-medium hover:text-usa-red transition-colors duration-300" data-i18n="nav.contact">Contato</a>
+            
+            <!-- Modo Escuro/Claro Mobile -->
+            <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-700">
+                <span data-i18n="mobile.mode">Modo</span>
+                <div class="mode-switch" id="mobile-mode-switch">
+                    <div class="absolute left-1 top-1 text-xs">
+                        <i class="fas fa-moon text-gray-400"></i>
+                    </div>
+                    <div class="absolute right-1 top-1 text-xs">
+                        <i class="fas fa-sun text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Idioma Mobile -->
+            <div class="flex space-x-4 mt-4">
+                <div class="language-flag flag-pt w-12 h-8 rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-usa-red" data-lang="pt-br">
+                    <img src="https://flagcdn.com/w40/br.png" class="w-full h-full object-cover">
+                </div>
+                <div class="language-flag flag-en w-12 h-8 rounded-md overflow-hidden cursor-pointer border-2 border-transparent hover:border-usa-red" data-lang="en-us">
+                    <img src="https://flagcdn.com/w40/us.png" class="w-full h-full object-cover">
+                </div>
+            </div>
+            
+            <!-- WhatsApp Mobile -->
+            <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20solicitar%20o%20catálogo%20de%20iPhones." 
+               target="_blank" 
+               class="usa-gradient-red-blue text-white font-bold py-3 px-6 rounded-xl text-center mt-6">
+                <i class="fab fa-whatsapp mr-2"></i><span data-i18n="mobile.whatsapp">Solicitar Catálogo</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Seção Hero -->
+    <section id="home" class="min-h-screen flex items-center pt-20 px-4 md:px-8 relative overflow-hidden">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Texto e CTA -->
+                <div class="fade-in">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full glass-effect mb-6">
+                        <div class="w-4 h-4 rounded-full bg-usa-red mr-2"></div>
+                        <div class="w-4 h-4 rounded-full bg-white mr-2"></div>
+                        <div class="w-4 h-4 rounded-full bg-usa-blue mr-2"></div>
+                        <span class="text-usa-red font-medium" data-i18n="hero.badge">iPhones Importados dos EUA</span>
+                    </div>
+                    
+                    <h2 class="text-5xl md:text-7xl font-bold mb-6">
+                        <span data-i18n="hero.title1">iPhones Premium</span> 
+                        <br>
+                        <span class="text-transparent bg-clip-text usa-gradient-red-blue" data-i18n="hero.title2">Direto dos EUA</span>
+                    </h2>
+                    
+                    <p class="text-xl text-gray-400 mb-10 max-w-2xl" data-i18n="hero.subtitle">Trabalhamos com iPhones importados diretamente dos Estados Unidos, desde o iPhone 13 até os últimos lançamentos. Autenticidade garantida e procedência verificada.</p>
+                    
+                    <div class="flex flex-wrap gap-4 mb-12">
+                        <a href="#catalog" 
+                           class="usa-gradient-red-blue text-white font-bold py-4 px-8 rounded-2xl hover:shadow-2xl hover:shadow-red-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                            <i class="fas fa-mobile-alt mr-3"></i><span data-i18n="hero.ctaCatalog">Ver Catálogo Completo</span>
+                        </a>
+                        <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20fazer%20um%20orçamento%20de%20iPhone%20importado." 
+                           target="_blank" 
+                           class="border-2 border-usa-red text-usa-red font-bold py-4 px-8 rounded-2xl hover:bg-usa-red/10 transition-all duration-300">
+                            <i class="fas fa-calculator mr-3"></i><span data-i18n="hero.ctaBudget">Solicitar Orçamento</span>
+                        </a>
+                    </div>
+                    
+                    <!-- Diferenciais -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-xl glass-effect card-3d">
+                            <i class="fas fa-flag-usa text-usa-red text-xl mb-2"></i>
+                            <p class="font-medium" data-i18n="hero.feature1">Importação Direta</p>
+                            <p class="text-sm text-gray-400 mt-1" data-i18n="hero.feature1Desc">Direto dos EUA</p>
+                        </div>
+                        <div class="p-4 rounded-xl glass-effect card-3d">
+                            <i class="fas fa-certificate text-usa-blue text-xl mb-2"></i>
+                            <p class="font-medium" data-i18n="hero.feature2">100% Original</p>
+                            <p class="text-sm text-gray-400 mt-1" data-i18n="hero.feature2Desc">Autenticidade Garantida</p>
+                        </div>
+                        <div class="p-4 rounded-xl glass-effect card-3d">
+                            <i class="fas fa-shield-alt text-white text-xl mb-2"></i>
+                            <p class="font-medium" data-i18n="hero.feature3">Garantia</p>
+                            <p class="text-sm text-gray-400 mt-1" data-i18n="hero.feature3Desc">Procedência Verificada</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- iPhone 3D -->
+                <div class="flex justify-center items-center fade-in">
+                    <div class="iphone-3d-container" id="iphone-3d">
+                        <!-- iPhone 3D será renderizado aqui via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Visualização -->
+    <section class="py-20 px-4 md:px-8">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Visualização <span class="text-usa-red">Premium</span></h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">Veja como os conteúdos ficam incríveis na tela dos nossos iPhones importados. Qualidade de imagem superior garantida.</p>
+            </div>
+            
+            <!-- Swiper de visualização -->
+            <div class="swiper visualization-swiper fade-in">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1601972599720-36938d4ecd31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="iPhone Wallpaper 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="iPhone Wallpaper 2">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2028&q=80" alt="iPhone Wallpaper 3">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="iPhone Wallpaper 4">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <p class="text-lg text-gray-400 mb-6">A qualidade superior das telas dos iPhones importados proporciona uma experiência visual única. Cada detalhe é nítido e as cores são vibrantes.</p>
+                <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20a%20qualidade%20das%20telas%20dos%20iPhones%20importados." 
+                   target="_blank" 
+                   class="inline-flex items-center usa-gradient-red-blue text-white font-bold py-3 px-8 rounded-xl hover:opacity-90 transition-all duration-300">
+                    <i class="fas fa-info-circle mr-3"></i>
+                    <span>Saiba mais sobre as telas</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Catálogo -->
+    <section id="catalog" class="py-20 px-4 md:px-8">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6" data-i18n="catalog.title">Catálogo <span class="text-usa-red">Completo</span></h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto" data-i18n="catalog.subtitle">Trabalhamos com toda a linha de iPhones importados, desde o iPhone 13 até os últimos lançamentos. Solicite nosso catálogo completo com preços e condições.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- iPhone 13 Series -->
+                <div class="rounded-3xl overflow-hidden glass-effect card-3d">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-2xl font-bold">iPhone 13</h3>
+                                <p class="text-gray-400" data-i18n="catalog.iphone13Desc">Série Clássica</p>
+                            </div>
+                            <div class="text-usa-red text-3xl">
+                                <i class="fab fa-apple"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex justify-center mb-6">
+                                <div class="w-40 h-64 bg-gradient-to-b from-gray-800 to-black rounded-2xl relative overflow-hidden">
+                                    <!-- Tela do iPhone -->
+                                    <div class="absolute inset-2 bg-black rounded-xl overflow-hidden">
+                                        <div class="w-full h-full bg-gradient-to-br from-blue-900/30 to-purple-900/30 flex items-center justify-center">
+                                            <div class="text-center text-white/50">
+                                                <div class="text-2xl font-bold">13</div>
+                                                <div class="text-sm">Series</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature1">Chip A15 Bionic</span></li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature2">Câmera Dupla 12MP</span></li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature3">Bateria de Longa Duração</span></li>
+                            </ul>
+                        </div>
+                        
+                        <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20informações%20sobre%20o%20iPhone%2013." 
+                           target="_blank" 
+                           class="block w-full usa-gradient-red-blue text-white text-center font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300">
+                           <i class="fas fa-info-circle mr-2"></i><span data-i18n="catalog.ctaInfo">Mais Informações</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- iPhone 14 Series -->
+                <div class="rounded-3xl overflow-hidden glass-effect card-3d">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-2xl font-bold">iPhone 14</h3>
+                                <p class="text-gray-400" data-i18n="catalog.iphone14Desc">Série Avançada</p>
+                            </div>
+                            <div class="text-usa-red text-3xl">
+                                <i class="fab fa-apple"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex justify-center mb-6">
+                                <div class="w-40 h-64 bg-gradient-to-b from-gray-700 to-black rounded-2xl relative overflow-hidden">
+                                    <!-- Tela do iPhone -->
+                                    <div class="absolute inset-2 bg-black rounded-xl overflow-hidden">
+                                        <div class="w-full h-full bg-gradient-to-br from-purple-900/30 to-pink-900/30 flex items-center justify-center">
+                                            <div class="text-center text-white/50">
+                                                <div class="text-2xl font-bold">14</div>
+                                                <div class="text-sm">Series</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature4">Chip A15 Bionic</span></li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature5">Câmera 48MP (Pro)</span></li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature6">Dynamic Island</span></li>
+                            </ul>
+                        </div>
+                        
+                        <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20informações%20sobre%20o%20iPhone%2014." 
+                           target="_blank" 
+                           class="block w-full usa-gradient-red-blue text-white text-center font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300">
+                           <i class="fas fa-info-circle mr-2"></i><span data-i18n="catalog.ctaInfo">Mais Informações</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- iPhone 15 Series -->
+                <div class="rounded-3xl overflow-hidden glass-effect card-3d">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-2xl font-bold">iPhone 15</h3>
+                                <p class="text-gray-400" data-i18n="catalog.iphone15Desc">Série Moderna</p>
+                            </div>
+                            <div class="text-usa-red text-3xl">
+                                <i class="fab fa-apple"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex justify-center mb-6">
+                                <div class="w-40 h-64 bg-gradient-to-b from-gray-600 to-black rounded-2xl relative overflow-hidden">
+                                    <!-- Tela do iPhone -->
+                                    <div class="absolute inset-2 bg-black rounded-xl overflow-hidden">
+                                        <div class="w-full h-full bg-gradient-to-br from-cyan-900/30 to-blue-900/30 flex items-center justify-center">
+                                            <div class="text-center text-white/50">
+                                                <div class="text-2xl font-bold">15</div>
+                                                <div class="text-sm">Series</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature7">Chip A16 Bionic</span></li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature8">USB-C</span></li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature9">Design em Titânio</span></li>
+                            </ul>
+                        </div>
+                        
+                        <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20informações%20sobre%20o%20iPhone%2015." 
+                           target="_blank" 
+                           class="block w-full usa-gradient-red-blue text-white text-center font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300">
+                           <i class="fas fa-info-circle mr-2"></i><span data-i18n="catalog.ctaInfo">Mais Informações</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- iPhone 16/17 Series -->
+                <div class="rounded-3xl overflow-hidden glass-effect card-3d">
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-2xl font-bold">iPhone 16/17</h3>
+                                <p class="text-gray-400" data-i18n="catalog.iphone1617Desc">Últimos Lançamentos</p>
+                            </div>
+                            <div class="text-usa-red text-3xl">
+                                <i class="fab fa-apple"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex justify-center mb-6">
+                                <div class="w-40 h-64 bg-gradient-to-b from-gray-900 to-black rounded-2xl relative overflow-hidden">
+                                    <!-- Tela do iPhone -->
+                                    <div class="absolute inset-2 bg-black rounded-xl overflow-hidden">
+                                        <div class="w-full h-full bg-gradient-to-br from-usa-red/20 to-usa-blue/20 flex items-center justify-center">
+                                            <div class="text-center text-white/50">
+                                                <div class="text-2xl font-bold">16/17</div>
+                                                <div class="text-sm">Series</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature10">Chip A18/A19 Pro</span></li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature11">IA Integrada</span></li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-3"></i> <span data-i18n="catalog.feature12">Tecnologia Avançada</span></li>
+                            </ul>
+                        </div>
+                        
+                        <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20informações%20sobre%20os%20últimos%20iPhones%20(16/17)." 
+                           target="_blank" 
+                           class="block w-full usa-gradient-red-blue text-white text-center font-bold py-4 rounded-xl hover:opacity-90 transition-all duration-300">
+                           <i class="fas fa-info-circle mr-2"></i><span data-i18n="catalog.ctaInfo">Mais Informações</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Catálogo completo -->
+            <div class="mt-20 bg-gradient-to-r from-usa-red/20 to-usa-blue/20 rounded-3xl p-8 md:p-12 text-center fade-in">
+                <h3 class="text-3xl font-bold mb-4" data-i18n="catalog.fullCatalogTitle">Catálogo Completo de iPhones</h3>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto" data-i18n="catalog.fullCatalogText">Temos todos os modelos, cores, capacidades e acessórios. Entre em contato para receber nosso catálogo completo com preços atualizados, condições especiais e informações sobre prazos de entrega.</p>
+                <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20receber%20o%20catálogo%20completo%20de%20iPhones%20importados." 
+                   target="_blank" 
+                   class="inline-flex items-center usa-gradient-red-blue text-white font-bold py-4 px-10 rounded-2xl hover:shadow-2xl hover:shadow-red-500/30 transition-all duration-300 transform hover:-translate-y-1">
+                    <i class="fab fa-whatsapp text-xl mr-3"></i>
+                    <span data-i18n="catalog.ctaCatalog">Solicitar Catálogo Completo</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Sobre Nós -->
+    <section id="about" class="py-20 px-4 md:px-8">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Texto -->
+                <div class="fade-in">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8" data-i18n="about.title">Sobre a <span class="text-usa-red">AMR Mobile</span></h2>
+                    
+                    <div class="space-y-6">
+                        <p class="text-lg text-gray-300" data-i18n="about.text1">A AMR Mobile é especializada na importação de iPhones diretamente dos Estados Unidos, trazendo para você a tecnologia mais avançada da Apple com garantia e procedência verificada.</p>
+                        
+                        <p class="text-lg text-gray-300" data-i18n="about.text2">Nosso foco é conectar os entusiastas de tecnologia brasileiros aos produtos Apple, garantindo autenticidade, qualidade e suporte especializado para cada dispositivo.</p>
+                        
+                        <p class="text-lg text-gray-300" data-i18n="about.text3">Trabalhamos apenas com produtos 100% originais, importados através de canais oficiais, assegurando que cada iPhone entregue tenha a mesma qualidade e performance dos dispositivos vendidos nos EUA.</p>
+                    </div>
+                    
+                    <!-- Estatísticas -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mt-10">
+                        <div class="text-center p-4 rounded-xl glass-effect">
+                            <div class="text-3xl font-bold text-usa-red mb-2">1000+</div>
+                            <p class="text-gray-300" data-i18n="about.stats1">iPhones Vendidos</p>
+                        </div>
+                        <div class="text-center p-4 rounded-xl glass-effect">
+                            <div class="text-3xl font-bold text-usa-blue mb-2">100%</div>
+                            <p class="text-gray-300" data-i18n="about.stats2">Originais</p>
+                        </div>
+                        <div class="text-center p-4 rounded-xl glass-effect">
+                            <div class="text-3xl font-bold text-white mb-2">3+</div>
+                            <p class="text-gray-300" data-i18n="about.stats3">Anos no Mercado</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Imagem/Ilustração -->
+                <div class="fade-in">
+                    <div class="relative">
+                        <div class="w-full h-96 rounded-3xl overflow-hidden glass-effect">
+                            <div class="w-full h-full flex items-center justify-center">
+                                <div class="text-center p-8">
+                                    <div class="w-32 h-32 rounded-full usa-gradient-red-blue mx-auto mb-6 flex items-center justify-center">
+                                        <i class="fas fa-flag-usa text-6xl text-white"></i>
+                                    </div>
+                                    <h3 class="text-3xl font-bold mb-4" data-i18n="about.badge">Importação Direta EUA</h3>
+                                    <p class="text-gray-300" data-i18n="about.specialty">Produtos Apple Oficiais</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção FAQ -->
+    <section id="faq" class="py-20 px-4 md:px-8">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6" data-i18n="faq.title">Perguntas <span class="text-usa-red">Frequentes</span></h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto" data-i18n="faq.subtitle">Tire suas dúvidas sobre a compra de iPhones importados dos EUA.</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- FAQ Item 1 -->
+                <div class="rounded-2xl glass-effect overflow-hidden fade-in">
+                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center">
+                        <h3 class="text-xl font-bold" data-i18n="faq.q1">Os iPhones são realmente originais?</h3>
+                        <i class="fas fa-chevron-down text-usa-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-300" data-i18n="faq.a1">Sim, todos os iPhones que comercializamos são 100% originais, importados diretamente dos Estados Unidos através de canais oficiais. Cada dispositivo passa por verificação de autenticidade antes da entrega.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="rounded-2xl glass-effect overflow-hidden fade-in">
+                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center">
+                        <h3 class="text-xl font-bold" data-i18n="faq.q2">Qual o prazo de entrega?</h3>
+                        <i class="fas fa-chevron-down text-usa-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-300" data-i18n="faq.a2">O prazo de entrega varia entre 15 a 30 dias úteis, dependendo do modelo e disponibilidade nos EUA. Este prazo inclui a importação, desembaraço aduaneiro e transporte até sua cidade. Mantemos nossos clientes informados sobre cada etapa do processo.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="rounded-2xl glass-effect overflow-hidden fade-in">
+                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center">
+                        <h3 class="text-xl font-bold" data-i18n="faq.q3">Há garantia nos produtos?</h3>
+                        <i class="fas fa-chevron-down text-usa-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-300" data-i18n="faq.a3">Sim, todos os iPhones possuem garantia de 3 meses contra defeitos de fabricação. Além disso, fornecemos suporte técnico especializado durante todo o período de uso do dispositivo.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="rounded-2xl glass-effect overflow-hidden fade-in">
+                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center">
+                        <h3 class="text-xl font-bold" data-i18n="faq.q4">Como funciona o pagamento?</h3>
+                        <i class="fas fa-chevron-down text-usa-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-300" data-i18n="faq.a4">Aceitamos PIX, transferência bancária e cartão de crédito (com possibilidade de parcelamento). Para iniciar o processo, solicitamos uma entrada e o saldo pode ser parcelado conforme combinado. Trabalhamos com total transparência em todas as etapas.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="rounded-2xl glass-effect overflow-hidden fade-in">
+                    <div class="faq-question cursor-pointer p-6 flex justify-between items-center">
+                        <h3 class="text-xl font-bold" data-i18n="faq.q5">Os iPhones funcionam com operadoras brasileiras?</h3>
+                        <i class="fas fa-chevron-down text-usa-red transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-6 pb-6 hidden">
+                        <p class="text-gray-300" data-i18n="faq.a5">Sim, todos os iPhones que importamos são desbloqueados (unlocked) e compatíveis com as operadoras brasileiras. Eles suportam as bandas de frequência utilizadas no Brasil para 4G e 5G.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Contato -->
+    <section id="contact" class="py-20 px-4 md:px-8">
+        <div class="container mx-auto">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6" data-i18n="contact.title">Entre em <span class="text-usa-red">Contato</span></h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto" data-i18n="contact.subtitle">Fale conosco para orçamentos, dúvidas ou para solicitar nosso catálogo completo de iPhones importados.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Informações de contato -->
+                <div class="fade-in">
+                    <div class="space-y-8">
+                        <!-- WhatsApp -->
+                        <div class="flex items-start p-6 rounded-3xl glass-effect">
+                            <div class="w-16 h-16 rounded-2xl usa-gradient-red-blue flex items-center justify-center mr-6">
+                                <i class="fab fa-whatsapp text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">WhatsApp</h4>
+                                <p class="text-gray-300 mb-4">+55 71 9415-7662</p>
+                                <div class="flex flex-wrap gap-3">
+                                    <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20solicitar%20o%20catálogo%20de%20iPhones." 
+                                       target="_blank" 
+                                       class="usa-gradient-red-blue text-white font-medium py-2 px-6 rounded-xl hover:opacity-90 transition-opacity duration-300">
+                                        <i class="fas fa-book mr-2"></i><span data-i18n="contact.ctaCatalog">Solicitar Catálogo</span>
+                                    </a>
+                                    <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20fazer%20um%20orçamento%20de%20iPhone%20importado." 
+                                       target="_blank" 
+                                       class="border border-usa-red text-usa-red font-medium py-2 px-6 rounded-xl hover:bg-usa-red/10 transition-colors duration-300">
+                                        <i class="fas fa-calculator mr-2"></i><span data-i18n="contact.ctaBudget">Orçamento</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Instagram -->
+                        <div class="flex items-start p-6 rounded-3xl glass-effect">
+                            <div class="w-16 h-16 rounded-2xl usa-gradient-red-blue flex items-center justify-center mr-6">
+                                <i class="fab fa-instagram text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Instagram</h4>
+                                <p class="text-gray-300 mb-2">@amrmobile</p>
+                                <a href="https://instagram.com/amrmobile" 
+                                   target="_blank" 
+                                   class="inline-flex items-center usa-gradient-red-blue text-white font-medium py-2 px-6 rounded-xl hover:opacity-90 transition-opacity duration-300">
+                                    <i class="fab fa-instagram mr-2"></i><span data-i18n="contact.follow">Seguir</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chamada para ação -->
+                <div class="fade-in">
+                    <div class="bg-gradient-to-br from-usa-red/20 to-usa-blue/20 rounded-3xl p-8 md:p-10 border border-usa-red/20 h-full">
+                        <h3 class="text-3xl font-bold mb-6" data-i18n="contact.ctaTitle">Pronto para adquirir seu iPhone importado?</h3>
+                        <p class="text-xl text-gray-300 mb-8" data-i18n="contact.ctaText">Entre em contato agora mesmo e tenha acesso aos melhores iPhones importados com garantia e procedência verificada, direto dos EUA para você.</p>
+                        
+                        <div class="space-y-6 mb-10">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full usa-gradient-red-blue flex items-center justify-center mr-4">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <p class="text-gray-300" data-i18n="contact.benefit1">Produtos 100% originais dos EUA</p>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full usa-gradient-red-blue flex items-center justify-center mr-4">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <p class="text-gray-300" data-i18n="contact.benefit2">Garantia em todos os iPhones</p>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full usa-gradient-red-blue flex items-center justify-center mr-4">
+                                    <i class="fas fa-check text-white"></i>
+                                </div>
+                                <p class="text-gray-300" data-i18n="contact.benefit3">Suporte especializado</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="https://wa.me/557194157662?text=Olá,%20gostaria%20de%20fazer%20um%20orçamento%20de%20iPhone%20importado." 
+                               target="_blank" 
+                               class="inline-flex items-center usa-gradient-red-blue text-white font-bold text-lg py-4 px-10 rounded-2xl hover:shadow-2xl hover:shadow-red-500/20 transition-all duration-300">
+                                <i class="fab fa-whatsapp text-xl mr-3"></i>
+                                <span data-i18n="contact.finalCta">Falar com Especialista</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="py-12 px-4 md:px-8 border-t border-gray-800">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+                <!-- Logo e descrição -->
+                <div>
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-2xl usa-gradient-red-blue flex items-center justify-center mr-3">
+                            <i class="fab fa-apple text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">AMR <span class="text-usa-red">Mobile</span></h3>
+                    </div>
+                    <p class="text-gray-400" data-i18n="footer.description">iPhones importados premium direto dos EUA com garantia e procedência verificada.</p>
+                </div>
+                
+                <!-- Links rápidos -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6" data-i18n="footer.quickLinks">Links Rápidos</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-usa-red transition-colors duration-300" data-i18n="nav.home">Início</a></li>
+                        <li><a href="#catalog" class="text-gray-400 hover:text-usa-red transition-colors duration-300" data-i18n="nav.catalog">Catálogo</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-usa-red transition-colors duration-300" data-i18n="nav.about">Sobre Nós</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-usa-red transition-colors duration-300" data-i18n="nav.contact">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contato -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6" data-i18n="footer.contact">Contato</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-gray-400">
+                            <i class="fab fa-whatsapp mr-3 text-green-400"></i>
+                            <span>WhatsApp: +55 71 9415-7662</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fab fa-instagram mr-3 text-purple-400"></i>
+                            <span>Instagram: @amrmobile</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Redes sociais -->
+                <div>
+                    <h4 class="text-xl font-bold mb-6" data-i18n="footer.socialMedia">Redes Sociais</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://instagram.com/amrmobile" target="_blank" class="w-12 h-12 rounded-xl glass-effect flex items-center justify-center hover:usa-gradient-red-blue transition-all duration-300">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="https://wa.me/557194157662" target="_blank" class="w-12 h-12 rounded-xl glass-effect flex items-center justify-center hover:usa-gradient-red-blue transition-all duration-300">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-400" data-i18n="footer.copyright">© 2026 AMR Mobile. iPhones importados premium. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botões flutuantes (WhatsApp e Tradução) -->
+    <div class="floating-buttons">
+        <!-- Botão de Tradução -->
+        <div class="floating-language-btn" id="floating-language-btn" title="Mudar idioma">
+            <i class="fas fa-language"></i>
+        </div>
+        
+        <!-- Botão do WhatsApp -->
+        <a href="https://wa.me/557194157662" 
+           target="_blank" 
+           class="floating-language-btn floating-whatsapp-btn" title="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Sistema de tradução
+        const translations = {
+            'pt-br': {
+                'nav.home': 'Início',
+                'nav.catalog': 'Catálogo',
+                'nav.about': 'Sobre Nós',
+                'nav.faq': 'FAQ',
+                'nav.contact': 'Contato',
+                'hero.badge': 'iPhones Importados dos EUA',
+                'hero.title1': 'iPhones Premium',
+                'hero.title2': 'Direto dos EUA',
+                'hero.subtitle': 'Trabalhamos com iPhones importados diretamente dos Estados Unidos, desde o iPhone 13 até os últimos lançamentos. Autenticidade garantida e procedência verificada.',
+                'hero.ctaCatalog': 'Ver Catálogo Completo',
+                'hero.ctaBudget': 'Solicitar Orçamento',
+                'hero.feature1': 'Importação Direta',
+                'hero.feature1Desc': 'Direto dos EUA',
+                'hero.feature2': '100% Original',
+                'hero.feature2Desc': 'Autenticidade Garantida',
+                'hero.feature3': 'Garantia',
+                'hero.feature3Desc': 'Procedência Verificada',
+                'catalog.title': 'Catálogo',
+                'catalog.subtitle': 'Trabalhamos com toda a linha de iPhones importados, desde o iPhone 13 até os últimos lançamentos. Solicite nosso catálogo completo com preços e condições.',
+                'catalog.iphone13Desc': 'Série Clássica',
+                'catalog.iphone14Desc': 'Série Avançada',
+                'catalog.iphone15Desc': 'Série Moderna',
+                'catalog.iphone1617Desc': 'Últimos Lançamentos',
+                'catalog.feature1': 'Chip A15 Bionic',
+                'catalog.feature2': 'Câmera Dupla 12MP',
+                'catalog.feature3': 'Bateria de Longa Duração',
+                'catalog.feature4': 'Chip A15 Bionic',
+                'catalog.feature5': 'Câmera 48MP (Pro)',
+                'catalog.feature6': 'Dynamic Island',
+                'catalog.feature7': 'Chip A16 Bionic',
+                'catalog.feature8': 'USB-C',
+                'catalog.feature9': 'Design em Titânio',
+                'catalog.feature10': 'Chip A18/A19 Pro',
+                'catalog.feature11': 'IA Integrada',
+                'catalog.feature12': 'Tecnologia Avançada',
+                'catalog.ctaInfo': 'Mais Informações',
+                'catalog.fullCatalogTitle': 'Catálogo Completo de iPhones',
+                'catalog.fullCatalogText': 'Temos todos os modelos, cores, capacidades e acessórios. Entre em contato para receber nosso catálogo completo com preços atualizados, condições especiais e informações sobre prazos de entrega.',
+                'catalog.ctaCatalog': 'Solicitar Catálogo Completo',
+                'about.title': 'Sobre a',
+                'about.text1': 'A AMR Mobile é especializada na importação de iPhones diretamente dos Estados Unidos, trazendo para você a tecnologia mais avançada da Apple com garantia e procedência verificada.',
+                'about.text2': 'Nosso foco é conectar os entusiastas de tecnologia brasileiros aos produtos Apple, garantindo autenticidade, qualidade e suporte especializado para cada dispositivo.',
+                'about.text3': 'Trabalhamos apenas com produtos 100% originais, importados através de canais oficiais, assegurando que cada iPhone entregue tenha a mesma qualidade e performance dos dispositivos vendidos nos EUA.',
+                'about.stats1': 'iPhones Vendidos',
+                'about.stats2': 'Originais',
+                'about.stats3': 'Anos no Mercado',
+                'about.badge': 'Importação Direta EUA',
+                'about.specialty': 'Produtos Apple Oficiais',
+                'faq.title': 'Perguntas',
+                'faq.subtitle': 'Tire suas dúvidas sobre a compra de iPhones importados dos EUA.',
+                'faq.q1': 'Os iPhones são realmente originais?',
+                'faq.a1': 'Sim, todos os iPhones que comercializamos são 100% originais, importados diretamente dos Estados Unidos através de canais oficiais. Cada dispositivo passa por verificação de autenticidade antes da entrega.',
+                'faq.q2': 'Qual o prazo de entrega?',
+                'faq.a2': 'O prazo de entrega varia entre 15 a 30 dias úteis, dependendo do modelo e disponibilidade nos EUA. Este prazo inclui a importação, desembaraço aduaneiro e transporte até sua cidade. Mantemos nossos clientes informados sobre cada etapa do processo.',
+                'faq.q3': 'Há garantia nos produtos?',
+                'faq.a3': 'Sim, todos os iPhones possuem garantia de 3 meses contra defeitos de fabricação. Além disso, fornecemos suporte técnico especializado durante todo o período de uso do dispositivo.',
+                'faq.q4': 'Como funciona o pagamento?',
+                'faq.a4': 'Aceitamos PIX, transferência bancária e cartão de crédito (com possibilidade de parcelamento). Para iniciar o processo, solicitamos uma entrada e o saldo pode ser parcelado conforme combinado. Trabalhamos com total transparência em todas as etapas.',
+                'faq.q5': 'Os iPhones funcionam com operadoras brasileiras?',
+                'faq.a5': 'Sim, todos os iPhones que importamos são desbloqueados (unlocked) e compatíveis com as operadoras brasileiras. Eles suportam as bandas de frequência utilizadas no Brasil para 4G e 5G.',
+                'contact.title': 'Entre em',
+                'contact.subtitle': 'Fale conosco para orçamentos, dúvidas ou para solicitar nosso catálogo completo de iPhones importados.',
+                'contact.ctaCatalog': 'Solicitar Catálogo',
+                'contact.ctaBudget': 'Orçamento',
+                'contact.follow': 'Seguir',
+                'contact.ctaTitle': 'Pronto para adquirir seu iPhone importado?',
+                'contact.ctaText': 'Entre em contato agora mesmo e tenha acesso aos melhores iPhones importados com garantia e procedência verificada, direto dos EUA para você.',
+                'contact.benefit1': 'Produtos 100% originais dos EUA',
+                'contact.benefit2': 'Garantia em todos os iPhones',
+                'contact.benefit3': 'Suporte especializado',
+                'contact.finalCta': 'Falar com Especialista',
+                'footer.description': 'iPhones importados premium direto dos EUA com garantia e procedência verificada.',
+                'footer.quickLinks': 'Links Rápidos',
+                'footer.contact': 'Contato',
+                'footer.socialMedia': 'Redes Sociais',
+                'footer.copyright': '© 2026 AMR Mobile. iPhones importados premium. Todos os direitos reservados.',
+                'mobile.mode': 'Modo',
+                'mobile.whatsapp': 'Solicitar Catálogo'
+            },
+            'en-us': {
+                'nav.home': 'Home',
+                'nav.catalog': 'Catalog',
+                'nav.about': 'About Us',
+                'nav.faq': 'FAQ',
+                'nav.contact': 'Contact',
+                'hero.badge': 'Imported iPhones from USA',
+                'hero.title1': 'Premium iPhones',
+                'hero.title2': 'Direct from USA',
+                'hero.subtitle': 'We work with iPhones imported directly from the United States, from iPhone 13 to the latest releases. Guaranteed authenticity and verified provenance.',
+                'hero.ctaCatalog': 'View Complete Catalog',
+                'hero.ctaBudget': 'Request Quote',
+                'hero.feature1': 'Direct Import',
+                'hero.feature1Desc': 'Direct from USA',
+                'hero.feature2': '100% Original',
+                'hero.feature2Desc': 'Guaranteed Authenticity',
+                'hero.feature3': 'Warranty',
+                'hero.feature3Desc': 'Verified Provenance',
+                'catalog.title': 'Catalog',
+                'catalog.subtitle': 'We work with the complete line of imported iPhones, from iPhone 13 to the latest releases. Request our complete catalog with prices and conditions.',
+                'catalog.iphone13Desc': 'Classic Series',
+                'catalog.iphone14Desc': 'Advanced Series',
+                'catalog.iphone15Desc': 'Modern Series',
+                'catalog.iphone1617Desc': 'Latest Releases',
+                'catalog.feature1': 'A15 Bionic Chip',
+                'catalog.feature2': 'Dual 12MP Camera',
+                'catalog.feature3': 'Long Battery Life',
+                'catalog.feature4': 'A15 Bionic Chip',
+                'catalog.feature5': '48MP Camera (Pro)',
+                'catalog.feature6': 'Dynamic Island',
+                'catalog.feature7': 'A16 Bionic Chip',
+                'catalog.feature8': 'USB-C',
+                'catalog.feature9': 'Titanium Design',
+                'catalog.feature10': 'A18/A19 Pro Chip',
+                'catalog.feature11': 'Integrated AI',
+                'catalog.feature12': 'Advanced Technology',
+                'catalog.ctaInfo': 'More Information',
+                'catalog.fullCatalogTitle': 'Complete iPhone Catalog',
+                'catalog.fullCatalogText': 'We have all models, colors, capacities and accessories. Contact us to receive our complete catalog with updated prices, special conditions and delivery time information.',
+                'catalog.ctaCatalog': 'Request Complete Catalog',
+                'about.title': 'About',
+                'about.text1': 'AMR Mobile specializes in importing iPhones directly from the United States, bringing you the latest Apple technology with warranty and verified provenance.',
+                'about.text2': 'Our focus is connecting Brazilian technology enthusiasts with Apple products, ensuring authenticity, quality and specialized support for each device.',
+                'about.text3': 'We work only with 100% original products, imported through official channels, ensuring that every iPhone delivered has the same quality and performance as devices sold in the USA.',
+                'about.stats1': 'iPhones Sold',
+                'about.stats2': 'Original',
+                'about.stats3': 'Years in Market',
+                'about.badge': 'Direct USA Import',
+                'about.specialty': 'Official Apple Products',
+                'faq.title': 'Frequently Asked',
+                'faq.subtitle': 'Get answers to your questions about buying imported iPhones from the USA.',
+                'faq.q1': 'Are the iPhones really original?',
+                'faq.a1': 'Yes, all iPhones we sell are 100% original, imported directly from the United States through official channels. Each device goes through authenticity verification before delivery.',
+                'faq.q2': 'What is the delivery time?',
+                'faq.a2': 'Delivery time varies between 15 to 30 business days, depending on the model and availability in the USA. This timeframe includes importation, customs clearance and transportation to your city. We keep our customers informed about each step of the process.',
+                'faq.q3': 'Is there warranty on the products?',
+                'faq.a3': 'Yes, all iPhones have a 3-month warranty against manufacturing defects. Additionally, we provide specialized technical support throughout the device usage period.',
+                'faq.q4': 'How does payment work?',
+                'faq.a4': 'We accept PIX, bank transfer and credit card (with installment options). To start the process, we request a down payment and the balance can be divided as agreed. We work with complete transparency in all steps.',
+                'faq.q5': 'Do iPhones work with Brazilian carriers?',
+                'faq.a5': 'Yes, all iPhones we import are unlocked and compatible with Brazilian carriers. They support the frequency bands used in Brazil for 4G and 5G.',
+                'contact.title': 'Contact',
+                'contact.subtitle': 'Contact us for quotes, questions or to request our complete catalog of imported iPhones.',
+                'contact.ctaCatalog': 'Request Catalog',
+                'contact.ctaBudget': 'Quote',
+                'contact.follow': 'Follow',
+                'contact.ctaTitle': 'Ready to get your imported iPhone?',
+                'contact.ctaText': 'Contact us now and get access to the best imported iPhones with warranty and verified provenance, straight from the USA to you.',
+                'contact.benefit1': '100% original products from USA',
+                'contact.benefit2': 'Warranty on all iPhones',
+                'contact.benefit3': 'Specialized support',
+                'contact.finalCta': 'Talk to Specialist',
+                'footer.description': 'Premium imported iPhones directly from the USA with warranty and verified provenance.',
+                'footer.quickLinks': 'Quick Links',
+                'footer.contact': 'Contact',
+                'footer.socialMedia': 'Social Media',
+                'footer.copyright': '© 2026 AMR Mobile. Premium imported iPhones. All rights reserved.',
+                'mobile.mode': 'Mode',
+                'mobile.whatsapp': 'Request Catalog'
+            }
+        };
+
+        // Inicializar quando o DOM carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado, inicializando scripts...');
+            
+            // ========== MENU HAMBURGUER ==========
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (hamburger && mobileMenu) {
+                console.log('Elementos do menu encontrados');
+                
+                hamburger.addEventListener('click', function() {
+                    console.log('Menu hamburguer clicado');
+                    hamburger.classList.toggle('active');
+                    mobileMenu.classList.toggle('open');
+                });
+                
+                // Fechar menu ao clicar em um link
+                document.querySelectorAll('#mobileMenu a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        console.log('Link do menu mobile clicado');
+                        hamburger.classList.remove('active');
+                        mobileMenu.classList.remove('open');
+                    });
+                });
+            } else {
+                console.log('Elementos do menu NÃO encontrados:', {hamburger, mobileMenu});
+            }
+            
+            // ========== SISTEMA DE TRADUÇÃO ==========
+            function changeLanguage(lang) {
+                // Salvar preferência
+                localStorage.setItem('amr-mobile-lang', lang);
+                
+                // Alterar atributo lang do html
+                document.documentElement.lang = lang;
+                
+                // Traduzir elementos
+                const elements = document.querySelectorAll('[data-i18n]');
+                elements.forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+                
+                // Atualizar texto do botão flutuante
+                const langBtn = document.getElementById('floating-language-btn');
+                const currentLang = localStorage.getItem('amr-mobile-lang') || 'pt-br';
+                if (langBtn) {
+                    langBtn.title = currentLang === 'pt-br' ? 'Switch to English' : 'Mudar para Português';
+                }
+            }
+            
+            // Idioma salvo ou padrão (pt-br)
+            const savedLang = localStorage.getItem('amr-mobile-lang') || 'pt-br';
+            changeLanguage(savedLang);
+            
+            // Alternar idioma com botão flutuante
+            const floatingLangBtn = document.getElementById('floating-language-btn');
+            if (floatingLangBtn) {
+                floatingLangBtn.addEventListener('click', function() {
+                    const currentLang = localStorage.getItem('amr-mobile-lang') || 'pt-br';
+                    const newLang = currentLang === 'pt-br' ? 'en-us' : 'pt-br';
+                    changeLanguage(newLang);
+                });
+            }
+            
+            // Eventos para os botões de idioma no menu
+            document.querySelectorAll('.language-flag').forEach(flag => {
+                flag.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+            
+            // ========== MODO ESCURO/CLARO ==========
+            const body = document.body;
+            
+            // Verificar modo salvo
+            const savedMode = localStorage.getItem('amr-mobile-mode') || 'dark';
+            if (savedMode === 'light') {
+                body.classList.add('light-mode');
+            }
+            
+            // Função para alternar modo
+            function toggleMode() {
+                body.classList.toggle('light-mode');
+                
+                // Salvar preferência
+                const currentMode = body.classList.contains('light-mode') ? 'light' : 'dark';
+                localStorage.setItem('amr-mobile-mode', currentMode);
+            }
+            
+            // Botão modo desktop (se existir)
+            const modeSwitch = document.getElementById('mode-switch');
+            if (modeSwitch) {
+                modeSwitch.addEventListener('click', toggleMode);
+            }
+            
+            // Botão modo mobile
+            const mobileModeSwitch = document.getElementById('mobile-mode-switch');
+            if (mobileModeSwitch) {
+                mobileModeSwitch.addEventListener('click', toggleMode);
+            }
+            
+            // ========== FAQ ACCORDION ==========
+            document.querySelectorAll('.faq-question').forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    // Toggle current answer
+                    if (answer.classList.contains('hidden')) {
+                        answer.classList.remove('hidden');
+                        if (icon) icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        answer.classList.add('hidden');
+                        if (icon) icon.style.transform = 'rotate(0deg)';
+                    }
+                    
+                    // Close other answers
+                    document.querySelectorAll('.faq-question').forEach(otherQuestion => {
+                        if (otherQuestion !== this) {
+                            const otherAnswer = otherQuestion.nextElementSibling;
+                            const otherIcon = otherQuestion.querySelector('i');
+                            otherAnswer.classList.add('hidden');
+                            if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                        }
+                    });
+                });
+            });
+            
+            // ========== SWIPER ==========
+            function initSwiper() {
+                if (typeof Swiper !== 'undefined') {
+                    const swiper = new Swiper('.visualization-swiper', {
+                        slidesPerView: 1,
+                        spaceBetween: 0,
+                        loop: true,
+                        autoplay: {
+                            delay: 4000,
+                            disableOnInteraction: false,
+                        },
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+                        },
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                        breakpoints: {
+                            768: {
+                                slidesPerView: 1.5,
+                                spaceBetween: 20,
+                            },
+                            1024: {
+                                slidesPerView: 2,
+                                spaceBetween: 30,
+                            },
+                        },
+                    });
+                    console.log('Swiper inicializado');
+                } else {
+                    console.log('Swiper não carregado');
+                }
+            }
+            initSwiper();
+            
+            // ========== ANIMAÇÕES DE ENTRADA ==========
+            function initFadeInAnimations() {
+                const fadeElements = document.querySelectorAll('.fade-in');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, { threshold: 0.1 });
+                
+                fadeElements.forEach(element => observer.observe(element));
+            }
+            initFadeInAnimations();
+            
+            // ========== PARTÍCULAS FLUTUANTES ==========
+            function initFloatingParticles() {
+                const container = document.getElementById('floating-particles');
+                if (!container) return;
+                
+                const colors = ['rgba(178, 34, 52, 0.3)', 'rgba(60, 59, 110, 0.3)', 'rgba(255, 255, 255, 0.3)'];
+                
+                for (let i = 0; i < 15; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'floating-particle';
+                    
+                    // Tamanho aleatório
+                    const size = Math.random() * 100 + 50;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // Posição aleatória
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    
+                    // Cor aleatória
+                    particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]}, transparent)`;
+                    
+                    // Atraso na animação
+                    particle.style.animationDelay = `${Math.random() * 5}s`;
+                    
+                    container.appendChild(particle);
+                }
+            }
+            initFloatingParticles();
+            
+            // ========== IPHONE 3D ==========
+            function initiPhone3D() {
+                const container = document.getElementById('iphone-3d');
+                if (!container) return;
+                
+                // Criar uma representação visual do iPhone
+                const iphone = document.createElement('div');
+                iphone.className = 'relative w-full h-full';
+                iphone.innerHTML = `
+                    <div class="absolute inset-0 bg-gradient-to-b from-gray-900 to-black rounded-[3rem] border-[12px] border-gray-800 overflow-hidden">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-1/3 h-6 bg-black rounded-b-2xl z-10"></div>
+                        <div class="absolute inset-4 bg-black rounded-3xl overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-usa-red/20 to-usa-blue/20 flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class="fab fa-apple text-8xl text-white/20 mb-4"></i>
+                                    <div class="text-white/30 font-bold text-2xl">AMR Mobile</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gray-800 rounded-full"></div>
+                    </div>
+                `;
+                
+                container.appendChild(iphone);
+            }
+            initiPhone3D();
+            
+            // ========== ROLAGEM SUAVE ==========
+            function initSmoothScrolling() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        const href = this.getAttribute('href');
+                        if (href === '#' || href === '#!') return;
+                        
+                        e.preventDefault();
+                        const targetId = href;
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 100,
+                                behavior: 'smooth'
+                            });
+                            
+                            // Fechar menu mobile se estiver aberto
+                            if (mobileMenu && mobileMenu.classList.contains('open')) {
+                                hamburger.classList.remove('active');
+                                mobileMenu.classList.remove('open');
+                            }
+                        }
+                    });
+                });
+            }
+            initSmoothScrolling();
+            
+            console.log('Todos os scripts inicializados com sucesso!');
+        });
+    </script>
+</body>
+</html>
