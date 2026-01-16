@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMR Mobile - Dados e Informações da Empresa</title>
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/iphone--v1.png">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        
+        .header-gradient {
+            background: linear-gradient(135deg, #3C3B6E 0%, #B22234 100%);
+        }
+        
+        .data-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .data-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .data-label {
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .data-value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .verified-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .back-button {
+            background: linear-gradient(135deg, #3C3B6E 0%, #B22234 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(178, 34, 52, 0.3);
+        }
+        
+        .flag-usa {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .flag-usa::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #B22234 0%, #3C3B6E 100%);
+            border-radius: 8px;
+            z-index: -1;
+        }
+        
+        .qr-code-container {
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .info-table th {
+            background-color: #f1f5f9;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .info-table td {
+            padding: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+        
+        .info-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .info-table tr:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Cabeçalho -->
+    <header class="header-gradient text-white">
+        <div class="container mx-auto px-4 py-8 md:py-12">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <a href="/" class="inline-flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fab fa-apple text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-bold">AMR Mobile</h1>
+                            <p class="text-white/80">Dados e Informações da Empresa</p>
+                        </div>
+                    </a>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Dados Completos para Verificação</h2>
+                    <p class="text-lg text-white/90 max-w-3xl">Informações oficiais da AMR Mobile para validação no Meta Business Suite e outras plataformas. Dados atualizados e verificáveis.</p>
+                </div>
+                
+                <div class="verified-badge">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Dados Verificáveis</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Coluna 1: Dados Cadastrais -->
+            <div class="lg:col-span-2">
+                <div class="data-card p-6 mb-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-red-100 flex items-center justify-center">
+                            <i class="fas fa-building text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">Dados Cadastrais da Empresa</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="data-label mb-1">Razão Social</div>
+                            <div class="data-value mb-4">AMR MOBILE LTDA</div>
+                            
+                            <div class="data-label mb-1">Nome Fantasia</div>
+                            <div class="data-value mb-4">AMR Mobile</div>
+                            
+                            <div class="data-label mb-1">CNPJ</div>
+                            <div class="data-value mb-4">43.142.962/0001-98</div>
+                            
+                            <div class="data-label mb-1">Atividade Principal</div>
+                            <div class="data-value mb-4">47.52-1-00 - Comércio varejista especializado de equipamentos de telefonia e comunicação</div>
+                        </div>
+                        
+                        <div>
+                            <div class="data-label mb-1">Situação Cadastral</div>
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="data-value">ATIVA</div>
+                                <span class="verified-badge text-sm">Regular</span>
+                            </div>
+                            
+                            <div class="data-label mb-1">Data de Abertura</div>
+                            <div class="data-value mb-4">Constituída conforme legislação vigente</div>
+                            
+                            <div class="data-label mb-1">Natureza Jurídica</div>
+                            <div class="data-value mb-4">Sociedade Limitada</div>
+                            
+                            <div class="data-label mb-1">Porte da Empresa</div>
+                            <div class="data-value">MEI - Microempreendedor Individual (enquadramento aplicável)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Endereço -->
+                <div class="data-card p-6 mb-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
+                            <i class="fas fa-map-marker-alt text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">Endereço Comercial</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="data-label mb-1">Logradouro</div>
+                            <div class="data-value mb-4">COM POVOADO DOS COQUEIROS</div>
+                            
+                            <div class="data-label mb-1">Número</div>
+                            <div class="data-value mb-4">SN</div>
+                            
+                            <div class="data-label mb-1">Complemento</div>
+                            <div class="data-value mb-4">********</div>
+                            
+                            <div class="data-label mb-1">Bairro/Distrito</div>
+                            <div class="data-value mb-4">POVOADO DE COQUEIROS</div>
+                        </div>
+                        
+                        <div>
+                            <div class="data-label mb-1">Município</div>
+                            <div class="data-value mb-4">JANDAIRA</div>
+                            
+                            <div class="data-label mb-1">UF</div>
+                            <div class="data-value mb-4">BA - Bahia</div>
+                            
+                            <div class="data-label mb-1">CEP</div>
+                            <div class="data-value mb-4">48.310-000</div>
+                            
+                            <div class="data-label mb-1">Região</div>
+                            <div class="data-value">Nordeste Brasileiro</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contato e Redes Sociais -->
+                <div class="data-card p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
+                            <i class="fas fa-address-book text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">Contato e Redes Sociais</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="data-label mb-1">Telefone/WhatsApp Comercial</div>
+                            <div class="data-value mb-4 flex items-center gap-3">
+                                <span>(71) 99415-8764</span>
+                                <a href="https://wa.me/557194157662" target="_blank" class="text-green-600 hover:text-green-700">
+                                    <i class="fab fa-whatsapp text-xl"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="data-label mb-1">Email Corporativo</div>
+                            <div class="data-value mb-4">
+                                <a href="mailto:contato@amrmobile.com.br" class="text-blue-600 hover:text-blue-800 hover:underline">
+                                    contato@amrmobile.com.br
+                                </a>
+                            </div>
+                            
+                            <div class="data-label mb-1">Horário de Atendimento</div>
+                            <div class="data-value">Segunda a Sexta: 9h às 18h | Sábado: 9h às 13h</div>
+                        </div>
+                        
+                        <div>
+                            <div class="data-label mb-1">Redes Sociais Oficiais</div>
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center">
+                                        <i class="fab fa-instagram text-pink-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="data-value">Instagram</div>
+                                        <div class="text-sm text-slate-600">@amrmobile</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center">
+                                        <i class="fab fa-facebook text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="data-value">Facebook</div>
+                                        <div class="text-sm text-slate-600">/amrmobile</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
+                                        <i class="fab fa-whatsapp text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <div class="data-value">WhatsApp Business</div>
+                                        <div class="text-sm text-slate-600">+55 71 9415-7662</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coluna 2: Informações para Verificação -->
+            <div>
+                <!-- Resumo para Verificação -->
+                <div class="data-card p-6 mb-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-amber-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">Para Verificação</h3>
+                    </div>
+                    
+                    <p class="text-slate-600 mb-6">Use estes dados para verificar sua empresa no Meta Business Suite e outras plataformas:</p>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                            <div class="data-label mb-1">CNPJ para Verificação</div>
+                            <div class="data-value font-mono">43.142.962/0001-98</div>
+                        </div>
+                        
+                        <div class="p-4 bg-green-50 rounded-lg border border-green-100">
+                            <div class="data-label mb-1">Nome da Empresa</div>
+                            <div class="data-value">AMR MOBILE LTDA</div>
+                        </div>
+                        
+                        <div class="p-4 bg-purple-50 rounded-lg border border-purple-100">
+                            <div class="data-label mb-1">Telefone de Contato</div>
+                            <div class="data-value">(71) 99415-8764</div>
+                        </div>
+                        
+                        <div class="p-4 bg-red-50 rounded-lg border border-red-100">
+                            <div class="data-label mb-1">Endereço Completo</div>
+                            <div class="data-value text-sm">COM POVOADO DOS COQUEIROS, SN, POVOADO DE COQUEIROS, JANDAIRA - BA, 48310-000</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-100">
+                        <div class="flex items-center gap-3 mb-3">
+                            <i class="fas fa-lightbulb text-blue-600"></i>
+                            <div class="font-bold text-blue-800">Dica para Verificação</div>
+                        </div>
+                        <p class="text-sm text-slate-700">Mantenha estes dados consistentes em todas as plataformas. Use o mesmo CNPJ, nome da empresa e telefone em todas as verificações.</p>
+                    </div>
+                </div>
+                
+                <!-- QR Code para WhatsApp -->
+                <div class="data-card p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-center">Contato Rápido via WhatsApp</h3>
+                    <div class="qr-code-container flex flex-col items-center">
+                        <div class="mb-4 p-4 bg-white border-2 border-dashed border-green-200 rounded-lg">
+                            <div class="text-center">
+                                <i class="fab fa-whatsapp text-6xl text-green-500 mb-3"></i>
+                                <div class="font-bold text-lg">WhatsApp Business</div>
+                                <div class="text-slate-600">+55 71 9415-7662</div>
+                            </div>
+                        </div>
+                        
+                        <a href="https://wa.me/557194157662?text=Olá,%20AMR%20Mobile!%20Estou%20no%20site%20e%20gostaria%20de%20mais%20informações." 
+                           target="_blank" 
+                           class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity text-center">
+                            <i class="fab fa-whatsapp mr-2"></i> Iniciar Conversa
+                        </a>
+                        
+                        <p class="text-sm text-slate-500 text-center mt-4">
+                            Clique para conversar diretamente com nossa equipe comercial via WhatsApp Business
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Especialização -->
+                <div class="data-card p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-100 to-red-100 flex items-center justify-center">
+                            <i class="fas fa-flag-usa text-red-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold flag-usa px-2">Especialização</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <div>
+                                <div class="font-bold">Importação Direta EUA</div>
+                                <div class="text-sm text-slate-600">iPhones originais importados dos Estados Unidos</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <div>
+                                <div class="font-bold">Produtos Apple</div>
+                                <div class="text-sm text-slate-600">iPhones, acessórios e produtos oficiais Apple</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <div>
+                                <div class="font-bold">Garantia e Qualidade</div>
+                                <div class="text-sm text-slate-600">Produtos 100% originais com procedência verificada</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <div>
+                                <div class="font-bold">Atendimento Nacional</div>
+                                <div class="text-sm text-slate-600">Entrega para todo o Brasil</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg border border-red-100">
+                        <div class="text-center">
+                            <div class="text-red-700 font-bold mb-2">Foco no Mercado Brasileiro</div>
+                            <p class="text-sm text-slate-700">Importação especializada para atender o mercado brasileiro com produtos Apple originais dos EUA.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabela de Informações para Desenvolvedores -->
+        <div class="data-card p-6 mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center">
+                    <i class="fas fa-code text-indigo-600 text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold">Dados Estruturados para Desenvolvedores</h3>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="info-table">
+                    <thead>
+                        <tr>
+                            <th>Campo</th>
+                            <th>Valor</th>
+                            <th>Tipo</th>
+                            <th>Uso Recomendado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>legal_name</td>
+                            <td>AMR MOBILE LTDA</td>
+                            <td>string</td>
+                            <td>Verificação oficial</td>
+                        </tr>
+                        <tr>
+                            <td>tax_id</td>
+                            <td>43.142.962/0001-98</td>
+                            <td>string (CNPJ)</td>
+                            <td>Identificação fiscal</td>
+                        </tr>
+                        <tr>
+                            <td>trade_name</td>
+                            <td>AMR Mobile</td>
+                            <td>string</td>
+                            <td>Marca/comunicação</td>
+                        </tr>
+                        <tr>
+                            <td>phone</td>
+                            <td>+55 71 99415-8764</td>
+                            <td>string (E.164)</td>
+                            <td>Contato comercial</td>
+                        </tr>
+                        <tr>
+                            <td>address_street</td>
+                            <td>COM POVOADO DOS COQUEIROS</td>
+                            <td>string</td>
+                            <td>Localização física</td>
+                        </tr>
+                        <tr>
+                            <td>address_city</td>
+                            <td>JANDAIRA</td>
+                            <td>string</td>
+                            <td>Localização geográfica</td>
+                        </tr>
+                        <tr>
+                            <td>address_state</td>
+                            <td>BA</td>
+                            <td>string (UF)</td>
+                            <td>Jurisdição estadual</td>
+                        </tr>
+                        <tr>
+                            <td>address_zip</td>
+                            <td>48310-000</td>
+                            <td>string (CEP)</td>
+                            <td>Código postal</td>
+                        </tr>
+                        <tr>
+                            <td>business_category</td>
+                            <td>47.52-1-00</td>
+                            <td>string (CNAE)</td>
+                            <td>Classificação de atividade</td>
+                        </tr>
+                        <tr>
+                            <td>country</td>
+                            <td>BR</td>
+                            <td>string (ISO)</td>
+                            <td>País de operação</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-6 p-4 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg border border-indigo-100">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-info-circle text-indigo-600"></i>
+                    <div>
+                        <div class="font-bold text-indigo-800">Para Integrações</div>
+                        <p class="text-sm text-slate-700">Estes dados formatados podem ser usados em APIs, meta tags e sistemas de verificação empresarial.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instruções para Verificação no Meta -->
+        <div class="data-card p-6 mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center">
+                    <i class="fab fa-facebook-square text-blue-600 text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold">Instruções para Verificação no Meta Business Suite</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-blue-700">Passo a Passo:</h4>
+                    <ol class="space-y-4 list-decimal pl-5">
+                        <li class="pl-2">
+                            <span class="font-bold">Acesse o Business Suite</span>
+                            <p class="text-sm text-slate-600 mt-1">Vá para business.facebook.com e selecione sua empresa</p>
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-bold">Inicie a Verificação</span>
+                            <p class="text-sm text-slate-600 mt-1">No menu Configurações, procure por "Verificação de Empresa"</p>
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-bold">Insira os Dados</span>
+                            <p class="text-sm text-slate-600 mt-1">Use o CNPJ <code class="bg-slate-100 px-2 py-1 rounded">43.142.962/0001-98</code> e os dados desta página</p>
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-bold">Confirme o Telefone</span>
+                            <p class="text-sm text-slate-600 mt-1">O telefone de verificação será <strong>(71) 99415-8764</strong></p>
+                        </li>
+                        <li class="pl-2">
+                            <span class="font-bold">Aguarde Aprovação</span>
+                            <p class="text-sm text-slate-600 mt-1">O processo pode levar alguns dias úteis</p>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-green-700">Dados Necessários:</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                                <span class="text-green-600 font-bold">1</span>
+                            </div>
+                            <div>
+                                <div class="font-bold">CNPJ Completo</div>
+                                <div class="text-sm text-slate-600">43.142.962/0001-98</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                                <span class="text-green-600 font-bold">2</span>
+                            </div>
+                            <div>
+                                <div class="font-bold">Nome Legal da Empresa</div>
+                                <div class="text-sm text-slate-600">AMR MOBILE LTDA</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                                <span class="text-green-600 font-bold">3</span>
+                            </div>
+                            <div>
+                                <div class="font-bold">Endereço Comercial</div>
+                                <div class="text-sm text-slate-600">Jandaíra - BA, 48310-000</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                                <span class="text-green-600 font-bold">4</span>
+                            </div>
+                            <div>
+                                <div class="font-bold">Telefone de Contato</div>
+                                <div class="text-sm text-slate-600">(71) 99415-8764</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                                <span class="text-green-600 font-bold">5</span>
+                            </div>
+                            <div>
+                                <div class="font-bold">Site Oficial</div>
+                                <div class="text-sm text-slate-600">https://amrmobile.com.br</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-100">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-clock text-blue-600"></i>
+                            <div>
+                                <div class="font-bold text-blue-800">Tempo de Verificação</div>
+                                <p class="text-sm text-slate-700">A verificação no Meta Business Suite geralmente leva de 3 a 7 dias úteis após envio completo dos documentos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-slate-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-red-600 flex items-center justify-center">
+                            <i class="fab fa-apple text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">AMR Mobile</h3>
+                            <p class="text-slate-300">iPhones Importados dos EUA</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-400 text-sm">CNPJ: 43.142.962/0001-98 | Jandaíra - BA</p>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <a href="/" class="back-button px-6 py-3 rounded-lg font-bold inline-flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar para o Site
+                    </a>
+                    
+                    <a href="https://wa.me/557194157662" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold inline-flex items-center gap-2 transition-colors">
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-700 mt-8 pt-8 text-center">
+                <p class="text-slate-400">© 2024 AMR Mobile LTDA. Todos os direitos reservados.</p>
+                <p class="text-slate-500 text-sm mt-2">Esta página contém dados oficiais para verificação empresarial. Última atualização: Janeiro 2024</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Copiar CNPJ ao clicar
+            const cnpjElement = document.querySelector('[data-cnpj]');
+            if (cnpjElement) {
+                cnpjElement.addEventListener('click', function() {
+                    const cnpj = '43.142.962/0001-98';
+                    navigator.clipboard.writeText(cnpj).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'CNPJ copiado!';
+                        this.style.color = '#10b981';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.color = '';
+                        }, 2000);
+                    });
+                });
+            }
+            
+            // Suavizar scroll para âncoras
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Atualizar ano do copyright
+            const yearSpan = document.getElementById('current-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+            
+            // Animar cards ao rolar
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.data-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
